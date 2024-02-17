@@ -51,13 +51,13 @@ func installFlatpakPrograms() {
 	fmt.Println("Updating Flatpak...")
 	applications := [8]string{
 		"com.brave.Browser",
-		"com.discordapp.Discord",
-		"com.getpostman.Postman",
 		"com.mattjakeman.ExtensionManager",
-		"it.fabiodistasio.AntaresSQL",
-		"md.obsidian.Obsidian",
 		"me.kozec.syncthingtk",
+		"md.obsidian.Obsidian",
+		"com.discordapp.Discord",
 		"org.telegram.desktop",
+		"com.getpostman.Postman",
+		"it.fabiodistasio.AntaresSQL",
 	}
 	for _, app := range applications {
 		fmt.Println("Installing " + app + " ...")
@@ -166,5 +166,5 @@ func main() {
 			questions[i].function()
 		}
 	}
-	fmt.Println("\n\nDone!\n Make sure you git clone your dotfiles & nvim folder, after setting up SSH.")
+	fmt.Println("\n\nDone!\n Make sure you git clone your dotfiles, after setting up SSH.")
 }
