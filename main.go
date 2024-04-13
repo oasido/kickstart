@@ -38,7 +38,7 @@ func installDependencies() {
 	}
 	fmt.Println("Dependencies updated!")
 
-	essentials := "zsh tmux ripgrep gd fzf git"
+	essentials := "zsh tmux ripgrep gd fzf git build-essential"
 	installEssentials := exec.Command("/bin/bash", "-c", "sudo apt install -y "+essentials)
 	installEssentialsErr := installEssentials.Run()
 	if installEssentialsErr != nil {
