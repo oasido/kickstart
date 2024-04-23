@@ -12,11 +12,11 @@ func askForConfirmation(s string) bool {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
-		fmt.Printf("%s [y/n]: ", s)
+		fmt.Printf("%s [y/n]: \n", s)
 
 		response, err := reader.ReadString('\n')
 		if err != nil {
-			fmt.Printf("Error: %s\n", err)
+			fmt.Printf("Error:\n%s\n", err)
 		}
 
 		response = strings.ToLower(strings.TrimSpace(response))
@@ -31,20 +31,21 @@ func askForConfirmation(s string) bool {
 
 func installDependencies() {
 	fmt.Println("Updating dependencies...")
-	updateAndUpgradeCmd := exec.Command("/bin/bash", "-c", "sudo apt update && sudo apt upgrade")
+	updateAndUpgradeCmd := exec.Command("/bin/bash", "-c", "apt-get update && apt-get install -y sudo curl git && sudo apt update && sudo apt upgrade -y")
 	updateAndUpgradeErr := updateAndUpgradeCmd.Run()
 	if updateAndUpgradeErr != nil {
-		fmt.Printf("Error installing dependencies: %s\n", updateAndUpgradeErr)
+		fmt.Printf("Error installing dependencies:\n%s\n", updateAndUpgradeErr)
 	}
 	fmt.Println("Dependencies updated!")
 
-	essentials := "zsh tmux ripgrep gd fzf git build-essential"
+	essentials := "tmux ripgrep fzf git build-essential lynx libfuse2"
+	fmt.Println("Installing essential dependencies...")
 	installEssentials := exec.Command("/bin/bash", "-c", "sudo apt install -y "+essentials)
 	installEssentialsErr := installEssentials.Run()
 	if installEssentialsErr != nil {
-		fmt.Printf("Error installing deps: %s\n", installEssentialsErr)
+		fmt.Printf("Error installing deps:\n%s\n", installEssentialsErr)
 	}
-	fmt.Println("Installed packages: " + essentials)
+	fmt.Println("Installed:\n" + essentials)
 }
 
 func installFlatpakPrograms() {
@@ -73,7 +74,7 @@ func installFlatpakPrograms() {
 func createDirectories() {
 	home, err := os.UserHomeDir()
 	if err != nil {
-		fmt.Printf("Error finding home directory:\n%s", err)
+		fmt.Printf("Error finding home directory:\n%s\n", err)
 	}
 	paths := [3]string{
 		".config", "sb", "work",
@@ -141,6 +142,35 @@ git clone https://github.com/oasido/nvim.git ~/.config/nvim
 
 }
 
+func installi3wm() {
+	fmt.Println("Installing i3wm...")
+	installDeps := exec.Command("/bin/bash", "-c", "sudo apt update && sudo apt install -y i3 i3lock nitrogen rofi picom pulsemixer sxhkd lxappearance")
+	installDepsErr := installDeps.Run()
+	if installDepsErr != nil {
+		fmt.Printf("Error installing dependencies:\n %s\n", installDepsErr)
+	}
+
+	run := `sudo apt install -y build-essential git cmake cmake-data pkg-config python3-sphinx python3-packaging libuv1-dev libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python3-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev
+sudo apt install -y libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev
+mkdir -p ~/.config/polybar && cd ~/.config/polybar
+git clone --recursive https://github.com/polybar/polybar
+cd polybar
+mkdir build
+cd build
+cmake ..
+make -j$(nproc)
+sudo make install
+`
+	cmd, err := exec.Command("/bin/bash", "-c", run).Output()
+	if err != nil {
+		fmt.Printf("Error installing/building Polybar:\n%s\n", err)
+	}
+	fmt.Printf("%s", cmd)
+
+	fmt.Println("i3wm installed!")
+
+}
+
 func main() {
 	questions := []struct {
 		question string
@@ -153,6 +183,7 @@ func main() {
 		{"Create directories?", createDirectories, false},
 		{"Install OhMyZsh?", installOMZ, false},
 		{"Install Neovim?", installNeovim, false},
+		{"Install i3WM?", installi3wm, false},
 	}
 
 	for i := range questions {
@@ -166,5 +197,5 @@ func main() {
 			questions[i].function()
 		}
 	}
-	fmt.Println("\n\nDone!\n Make sure you git clone your dotfiles, after setting up SSH.")
+	fmt.Println("\n\nDone!\n Make sure you git clone your dotfiles.")
 }

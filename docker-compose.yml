@@ -1,0 +1,9 @@
+---
+
+services:
+  debian:
+    container_name: debian
+    image: debian:latest
+    volumes:
+      - ./kickstart:/usr/local/bin/kickstart
+    tty: true
