@@ -178,12 +178,12 @@ func main() {
 		install  bool
 	}{
 		{"Install essential dependencies?", installDependencies, false},
-		{"Install programs through flatpak?", installFlatpakPrograms, false},
 		{"Install NVM & the latest Node LTS version?", installNvm, false},
 		{"Create directories?", createDirectories, false},
-		{"Install OhMyZsh?", installOMZ, false},
 		{"Install Neovim?", installNeovim, false},
 		{"Install i3WM?", installi3wm, false},
+		{"Install programs through flatpak?", installFlatpakPrograms, false},
+		{"Install OhMyZsh?", installOMZ, false},
 	}
 
 	for i := range questions {
