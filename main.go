@@ -38,7 +38,7 @@ func installDependencies() {
 	}
 	fmt.Println("Dependencies updated!")
 
-	essentials := "tmux ripgrep fzf git build-essential lynx libfuse2 xprintidle"
+	essentials := "tmux ripgrep fzf git build-essential lynx libfuse2 xprintidle playerctl"
 	fmt.Println("Installing essential dependencies...")
 	installEssentials := exec.Command("/bin/bash", "-c", "sudo apt install -y "+essentials)
 	installEssentialsErr := installEssentials.Run()
